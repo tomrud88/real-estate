@@ -27,11 +27,17 @@ export default function SinglePage() {
     }
   };
 
-  const handleSendMessage = () => {
+    const handleSendMessage = async () => {
     if (!currentUser) {
       navigate("/login");
     } else {
-      navigate("/profile", { state: { chatId: post.chatId, receiver: post.user } });
+      try {
+        const res = await apiRequest.post("/chats", { receiverId: post.user.userId });
+        const newChat = res.data;
+        navigate("/profile", { state: { chatId: newChat.id, receiver: post.username } });
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 
