@@ -20,12 +20,6 @@ export default function Chat({chats, initialChatId, initialReceiver }) {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat]);
 
-  useEffect(() => {
-    if(initialChatId && initialReceiver) {
-      handleOpenChat(initialChatId, initialReceiver);
-    }
-  }, [initialChatId, initialReceiver]);
-  
   const handleOpenChat = async (id, receiver) => {
     try {
       console.log("Opening chat with ID:", id);
@@ -39,6 +33,13 @@ export default function Chat({chats, initialChatId, initialReceiver }) {
       console.log(err)
     }
   }
+
+  useEffect(() => {
+    if(initialChatId && initialReceiver) {
+      handleOpenChat(initialChatId, initialReceiver);
+    }
+  }, [initialChatId, initialReceiver]);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
