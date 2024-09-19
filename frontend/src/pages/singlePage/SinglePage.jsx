@@ -32,7 +32,7 @@ export default function SinglePage() {
       navigate("/login");
     } else {
       try {
-        const res = await apiRequest.post("/chats", { receiverId: post.user.userId });
+        const res = await apiRequest.post("/chats", { receiverId: post.userId });
         const newChat = res.data;
         navigate("/profile", { state: { chatId: newChat.id, receiver: post.username } });
       } catch (err) {
