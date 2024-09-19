@@ -7,7 +7,7 @@ import { SocketContext } from '../../context/SocketContext';
 import { useNotificationStore } from '../../lib/notificationStore';
 
 
-export default function Chat({chats}) {
+export default function Chat({chats, initialChatId, initialReceiver }) {
   const [chat, setChat] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const { socket } = useContext(SocketContext)
@@ -20,6 +20,12 @@ export default function Chat({chats}) {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat]);
 
+  useEffect(() => {
+    if(initialChatId && initialReceiver) {
+      handleOpenChat(initialChatId, initialReceiver);
+    }
+  }, [initialChatId, initialReceiver]);
+  
   const handleOpenChat = async (id, receiver) => {
     try {
       console.log("Opening chat with ID:", id);
