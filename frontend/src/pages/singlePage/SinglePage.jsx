@@ -27,6 +27,14 @@ export default function SinglePage() {
     }
   };
 
+  const handleSendMessage = () => {
+    if (!currentUser) {
+      navigate("/login");
+    } else {
+      navigate("/profile", { state: { chatId: post.chatId, receiver: post.user } });
+    }
+  }
+
   return (
     <div className="singlePage">
       <div className="details">
@@ -149,7 +157,7 @@ export default function SinglePage() {
             <Map items={[post]} />
           </div>
           <div className="buttons">
-            <button>
+            <button onClick={handleSendMessage}>
               <img src="/icons8-chat-64.png" alt="" />
               Send a Message
             </button>
