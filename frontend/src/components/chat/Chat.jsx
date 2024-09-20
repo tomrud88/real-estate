@@ -11,9 +11,7 @@ export default function Chat({chats, initialChatId, initialReceiver }) {
   const [chat, setChat] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const { socket } = useContext(SocketContext)
-
   const messageEndRef = useRef();
-
   const decrease = useNotificationStore((state) => state.decrease);
 
   useEffect(() => {
