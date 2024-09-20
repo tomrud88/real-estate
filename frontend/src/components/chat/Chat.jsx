@@ -18,6 +18,7 @@ export default function Chat({chats, initialChatId, initialReceiver }) {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat]);
 
+  console.log(initialChatId, initialReceiver)
   useEffect(() => {
     if(initialChatId && initialReceiver) {
       handleOpenChat(initialChatId, initialReceiver);
