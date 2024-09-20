@@ -20,7 +20,6 @@ export default function Chat({chats, initialChatId, initialReceiver }) {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat]);
 
-
   useEffect(() => {
     if(initialChatId && initialReceiver) {
       handleOpenChat(initialChatId, initialReceiver);
