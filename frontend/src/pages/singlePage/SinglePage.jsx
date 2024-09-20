@@ -34,7 +34,7 @@ export default function SinglePage() {
       try {
         const res = await apiRequest.post("/chats", { receiverId: post.userId });
         const newChat = res.data;
-        navigate("/profile", { state: { chatId: newChat.id, receiver: post.username } });
+        navigate("/profile", { state: { chatId: newChat.id, receiver: post.user.username } });
       } catch (err) {
         console.log(err)
       }
