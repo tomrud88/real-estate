@@ -20,7 +20,14 @@ export default function Chat({chats, initialChatId, initialReceiver }) {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat]);
 
-  const handleOpenChat = async (id, receiver) => {
+
+  useEffect(() => {
+    if(initialChatId && initialReceiver) {
+      handleOpenChat(initialChatId, initialReceiver);
+    }
+  }, [initialChatId, initialReceiver]);
+  
+  async function handleOpenChat(id, receiver){
     try {
       console.log("Opening chat with ID:", id);
 
@@ -34,13 +41,6 @@ export default function Chat({chats, initialChatId, initialReceiver }) {
     }
   }
 
-  useEffect(() => {
-    if(initialChatId && initialReceiver) {
-      handleOpenChat(initialChatId, initialReceiver);
-    }
-  }, [initialChatId, initialReceiver]);
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -49,7 +49,6 @@ export default function Chat({chats, initialChatId, initialReceiver }) {
 
     if (!text) return;
     try {
-      
       const res = await apiRequest.post("/messages/" + chat.id, { text });
       setChat((prev) => ({ ...prev, messages: [...prev.messages, res.data] }));
       e.target.reset();
@@ -63,7 +62,6 @@ export default function Chat({chats, initialChatId, initialReceiver }) {
   };
 
   useEffect(() => {
-
    const read = async () => {
      try {
        await apiRequest.put("/chats/read/" + chat.id);
