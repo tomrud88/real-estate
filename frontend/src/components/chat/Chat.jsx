@@ -7,10 +7,10 @@ import { SocketContext } from '../../context/SocketContext';
 import { useNotificationStore } from '../../lib/notificationStore';
 
 
-export default function Chat({chats}) {
+export default function Chat({ chats, initialChatId, initialReceiver }) {
   const [chat, setChat] = useState(null);
   const { currentUser } = useContext(AuthContext);
-  const { socket } = useContext(SocketContext)
+  const { socket } = useContext(SocketContext);
 
   const messageEndRef = useRef();
 
@@ -25,58 +25,62 @@ export default function Chat({chats}) {
       console.log("Opening chat with ID:", id);
 
       const res = await apiRequest("/chats/" + id);
-       if (!res.data.seenBy.includes(currentUser.id)) {
-         decrease();
-       }
+      if (!res.data.seenBy.includes(currentUser.id)) {
+        decrease();
+      }
       setChat({ ...res.data, receiver });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
+
+   useEffect(() => {
+     if (initialChatId && initialReceiver) {
+       handleOpenChat(initialChatId, initialReceiver);
+     }
+   }, [initialChatId, initialReceiver]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-    const text = formData.get("text")
+    const text = formData.get("text");
 
     if (!text) return;
     try {
-      
       const res = await apiRequest.post("/messages/" + chat.id, { text });
       setChat((prev) => ({ ...prev, messages: [...prev.messages, res.data] }));
       e.target.reset();
       socket.emit("sendMessage", {
         receiverId: chat.receiver.id,
         data: res.data,
-      })
+      });
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-
-   const read = async () => {
-     try {
-       await apiRequest.put("/chats/read/" + chat.id);
-     } catch (err) {
-       console.log(err);
-     }
+    const read = async () => {
+      try {
+        await apiRequest.put("/chats/read/" + chat.id);
+      } catch (err) {
+        console.log(err);
+      }
     };
-    
+
     if (chat && socket) {
       socket.on("getMessage", (data) => {
         if (chat.id === data.chatId) {
           setChat((prev) => ({ ...prev, messages: [...prev.messages, data] }));
           read();
-        } 
-      })
+        }
+      });
     }
     return () => {
-      socket.off("getMessage")
-    }
-  },[socket,chat])
+      socket.off("getMessage");
+    };
+  }, [socket, chat]);
 
   return (
     <div className="chat">
@@ -87,9 +91,10 @@ export default function Chat({chats}) {
             className="message"
             key={c.id}
             style={{
-              backgroundColor: c.seenBy.includes(currentUser.id) || chat?.id === c.id
-                ? "white"
-                : "yellow",
+              backgroundColor:
+                c.seenBy.includes(currentUser.id) || chat?.id === c.id
+                  ? "white"
+                  : "yellow",
             }}
             onClick={() => handleOpenChat(c.id, c.receiver)}
           >
@@ -123,9 +128,7 @@ export default function Chat({chats}) {
                       ? "flex-end"
                       : "flex-start",
                   textAlign:
-                    message.userId === currentUser.id
-                      ? "right"
-                      : "left",
+                    message.userId === currentUser.id ? "right" : "left",
                 }}
                 key={message.id}
               >

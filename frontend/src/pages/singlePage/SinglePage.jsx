@@ -27,6 +27,20 @@ export default function SinglePage() {
     }
   };
 
+  const handleSendMessage = async () => {
+    if (!currentUser) {
+      navigate("/login");
+    } else {
+      try {
+        const res = await apiRequest.post("/chats", { receiverId: post.userId });
+        const newChat = res.data;
+        navigate("/profile", { state: { chatId: newChat.id, receiver: post.username, initialChatAvatar: post.avatar } });
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
+
   return (
     <div className="singlePage">
       <div className="details">
@@ -149,7 +163,7 @@ export default function SinglePage() {
             <Map items={[post]} />
           </div>
           <div className="buttons">
-            <button>
+            <button onClick={handleSendMessage}>
               <img src="/icons8-chat-64.png" alt="" />
               Send a Message
             </button>
