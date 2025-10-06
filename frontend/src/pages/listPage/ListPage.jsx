@@ -19,15 +19,14 @@ export default function ListPage() {
               errorElement={<p>Error loading posts!</p>}
             >
               {(postResponse) => {
-                console.log("postResponse:", postResponse);
-                console.log("postResponse.data:", postResponse.data);
-
-                // Check if data exists and is an array
-                if (!postResponse.data || !Array.isArray(postResponse.data)) {
-                  return <p>No posts found or invalid data format</p>;
+                // Handle the API response data
+                const posts = postResponse.data || [];
+                
+                if (!Array.isArray(posts) || posts.length === 0) {
+                  return <p>No posts found</p>;
                 }
 
-                return postResponse.data.map((post) => (
+                return posts.map((post) => (
                   <Card key={post.id} item={post} />
                 ));
               }}
