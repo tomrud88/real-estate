@@ -9,10 +9,9 @@ import { AuthContext } from '../../context/AuthContext';
 export default function ProfilePage() {
   const data = useLoaderData();
   const {updateUser, currentUser} = useContext(AuthContext);
-  const navigate = useNavigate()
-  
   const location = useLocation();
-  const { chatId, receiver, initialChatAvatar } = location.state || {};
+  const { chatId, receiver } = location.state || {};
+  const navigate = useNavigate()
 
   const handleLogout = async () => {
     try {
@@ -81,10 +80,13 @@ export default function ProfilePage() {
               resolve={data.chatResponse}
               errorElement={<p>Error loading chats!</p>}
             >
-              {(chatResponse) => <Chat chats={chatResponse.data}
-                initialChatId={chatId}
-                initialReceiver={receiver}
-                initialChatAvatar={initialChatAvatar} />}
+              {(chatResponse) => (
+                <Chat
+                  chats={chatResponse.data}
+                  initialChatId={chatId}
+                  initialReceiver={receiver}
+                />
+              )}
             </Await>
           </Suspense>
         </div>
