@@ -1,6 +1,6 @@
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./card.scss";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import apiRequest from "../../lib/apiRequest";
 import { AuthContext } from "../../context/AuthContext";
 
