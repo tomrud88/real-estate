@@ -21,14 +21,12 @@ export default function ListPage() {
               {(postResponse) => {
                 // Handle the API response data
                 const posts = postResponse.data || [];
-                
+
                 if (!Array.isArray(posts) || posts.length === 0) {
                   return <p>No posts found</p>;
                 }
 
-                return posts.map((post) => (
-                  <Card key={post.id} item={post} />
-                ));
+                return posts.map((post) => <Card key={post.id} item={post} />);
               }}
             </Await>
           </Suspense>
