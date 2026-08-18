@@ -1,8 +1,0 @@
-controllers
-routes
-middleware
-lib
-prisma
-node_modules
-.env
-*.md
