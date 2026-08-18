@@ -1,20 +1,14 @@
 {
   "version": 2,
-  "builds": [
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "devCommand": "npm start",
+  "framework": null,
+  "outputDirectory": ".",
+  "rewrites": [
     {
-      "src": "app.js",
-      "use": "@vercel/node"
+      "source": "/(.*)",
+      "destination": "/app.js"
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "app.js"
-    }
-  ],
-  "functions": {
-    "app.js": {
-      "maxDuration": 10
-    }
-  }
+  ]
 }
